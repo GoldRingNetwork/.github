@@ -1,37 +1,50 @@
 # Gold Ring Network
 
-**GOLD v2** — один Minecraft‑продукт на [goldring.top](https://goldring.top): Hub + gr-main, гильдии, ивенты, магазин/донат.
+**GOLD v2 is live** at [goldring.top](https://goldring.top)
+
+One Minecraft project — Hub + main world, guilds, events, shop.  
+**One backend JVM** (`gold-api`). Worlds protected. GitOps via ArgoCD.
 
 ```
-Players → Velocity → hub | gr-main
-Web/API → api-edge → gold-api (1 JVM)
-Worlds  → PVC Bound · ReclaimPolicy Retain
+:25565  →  Velocity  →  Hub  →  gr-main
+:443    →  edge  →  gold-website  ·  gold-api
 ```
+
+---
 
 ## Active repositories
 
 | Repo | Role |
 |------|------|
-| [**gold-api**](https://github.com/GoldRingNetwork/gold-api) | Unified Spring Boot backend (auth, social, mc, billing, media, JWT) |
-| [**gold-website**](https://github.com/GoldRingNetwork/gold-website) | Next.js site — events, guilds, shop, profile |
-| [**gold-infra**](https://github.com/GoldRingNetwork/gold-infra) | GitOps · Argo CD · Helm · nginx edge · netpol |
-| [**gold-plugins**](https://github.com/GoldRingNetwork/gold-plugins) | Paper / Velocity plugins monorepo |
-| [**gold-game**](https://github.com/GoldRingNetwork/gold-game) | Purpur chart, tenants hub/main, resource packs |
-| [**gold-docs**](https://github.com/GoldRingNetwork/gold-docs) | Architecture, cutover, ops |
+| **[gold-api](https://github.com/GoldRingNetwork/gold-api)** | Unified backend — auth, API, billing · **1 JVM** |
+| **[gold-website](https://github.com/GoldRingNetwork/gold-website)** | Next.js site — events, guilds, shop, profile |
+| **[gold-infra](https://github.com/GoldRingNetwork/gold-infra)** | GitOps cluster · Helm · ArgoCD · api-edge |
+| **[gold-plugins](https://github.com/GoldRingNetwork/gold-plugins)** | Paper / Velocity plugins monorepo |
+| **[gold-game](https://github.com/GoldRingNetwork/gold-game)** | Purpur chart · tenants · resource packs |
+| **[gold-docs](https://github.com/GoldRingNetwork/gold-docs)** | Architecture · cutover · world protection |
 
-## Stack (live)
+---
 
-- **Backend:** single JVM `gold-api` · image `ghcr.io/goldringnetwork/gold-api`
-- **Edge:** nginx `api-edge` · auth_request → `/auth/check` on gold-api
-- **Data:** CNPG Postgres · Redis · NATS · MinIO
-- **MC:** Purpur hub + gr-main · Velocity proxy
-- **Deploy:** push → CI → chart tag → Argo CD (no hand kubectl on prod)
+## How we ship
+
+| Principle | Reality |
+|-----------|---------|
+| **GitOps** | Code → CI → chart tags → ArgoCD. No hand edits in cluster |
+| **Single backend** | `gold-api` only — multi `gr-*-svc` cutover complete |
+| **Worlds** | `hub-data` + `gr-main-data` · **Bound · Retain · protect=world** |
+| **Prod** | `goldring.top` · always `main` |
+
+---
 
 ## Archived
 
-Multi‑tenant / Istio / minigames / marketplace era lives in **~35 archived `gr-*` repos**.  
-They stay for history — not product. Active work is **only** the six `gold-*` repos above.
+The multi-tenant platform era is **closed**.
 
-## Site
+~35 `gr-*` repos (microservices, Istio mesh, minigames, marketplace tooling) are **archived**.  
+GOLD v2 runs exclusively on the six `gold-*` repos above.
 
-**https://goldring.top**
+---
+
+**Play** · [goldring.top](https://goldring.top)  
+**API** · `api.goldring.top`  
+**Docs** · [gold-docs](https://github.com/GoldRingNetwork/gold-docs)
